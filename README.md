@@ -1,6 +1,6 @@
 # VIX-Conditioned Short-Term Reversal on S&P 500 Stocks
 
-Quantitative strategy research capstone (Imperial College Business School, Data Structures and Algorithms).
+Quantitative strategy research capstone (Imperial College Business School).
 
 **Question.** Does a weekly, sector-adjusted equity reversal strategy earn more after elevated VIX, and does sizing positions on lagged VIX improve after-cost performance?
 
