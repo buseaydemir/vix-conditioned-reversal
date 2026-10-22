@@ -1,7 +1,7 @@
 Buse Aydemir
 22 October 2026
 
-# Does Short-Term Equity Reversal Pay More After High VIX? A Post-Publication Test on S&P 500 Stocks
+# Does Short-Term Equity Reversal Pay More After High VIX? A Sector-Adjusted Backtest on S&P 500 Stocks
 
 **Summary.** I tested whether a weekly, sector-adjusted equity reversal strategy earns more after elevated VIX, and whether sizing positions on lagged VIX improves net performance. Out of sample (2018 to October 2026) the result is negative: the unconditional strategy loses 6.9% a year after 5 bps costs, the VIX rule loses 5.1% a year, and the improvement (+1.8% a year, t = 0.85) is not distinguishable from noise. A simpler rule that scales positions on realised volatility did at least as well as the VIX rule, so VIX added no information beyond volatility scaling. Full numbers are in the table at the start of Section 3.
 
