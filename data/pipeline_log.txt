@@ -1,0 +1,5 @@
+dropped FDXF: short history / many missing days (98.2% missing)
+dropped HONA: short history / many missing days (98.4% missing)
+dropped Q: short history / many missing days (95.7% missing)
+dropped VYLR: short history / many missing days (99.8% missing)
+final prices shape: (5736, 499), 2004-01-02 to 2026-10-20
