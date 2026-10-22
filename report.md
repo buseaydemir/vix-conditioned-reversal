@@ -23,7 +23,7 @@ Buse Aydemir
 
 ## 2. Data Pipeline
 
-**Sources.** Daily split- and dividend-adjusted closing prices and the VIX index from Yahoo Finance (via `yfinance`), 2 January 2004 to 21 October 2026. The list of current S&P 500 constituents and their GICS sectors was scraped from Wikipedia. No API keys are needed.
+**Sources.** Daily split- and dividend-adjusted closing prices and the VIX index from Yahoo Finance (via `yfinance`), 2 January 2004 to 20 October 2026. The list of current S&P 500 constituents and their GICS sectors was scraped from Wikipedia. No API keys are needed.
 
 **Snapshot.** `data_pipeline.py` builds the snapshot in `data/`: `prices.csv.gz` (5,736 trading days by 499 tickers), `sectors.csv`, `vix.csv`, `dropped_tickers.csv` (each dropped ticker with a reason) and `pipeline_log.txt`. The notebook only calls `load_snapshot()`, so it runs offline and reproducibly. Running `python data_pipeline.py --refresh` rebuilds the snapshot.
 
