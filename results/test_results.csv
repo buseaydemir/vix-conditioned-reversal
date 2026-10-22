@@ -1,0 +1,13 @@
+cost_bps,,unconditional,VIX rule,realised-vol rule
+5,cum_return,-0.521,-0.478,-0.353
+5,ann_return,-0.069,-0.051,-0.029
+5,ann_vol,0.173,0.217,0.205
+5,sharpe,-0.397,-0.233,-0.14
+5,max_drawdown,-0.69,-0.704,-0.654
+5,weeks,458.0,458.0,458.0
+10,cum_return,-0.78,-0.774,-0.706
+10,ann_return,-0.157,-0.145,-0.118
+10,ann_vol,0.173,0.217,0.205
+10,sharpe,-0.906,-0.67,-0.577
+10,max_drawdown,-0.824,-0.841,-0.806
+10,weeks,458.0,458.0,458.0
