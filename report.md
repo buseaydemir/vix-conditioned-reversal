@@ -9,13 +9,13 @@ Buse Aydemir
 
 **The pattern.** Stocks that have fallen more than their sector peers over the last five trading days tend to rebound over the following week, and stocks that have risen more than their sector peers tend to give some of it back (short-term, sector-adjusted reversal).
 
-**Why I think it exists.** Nagel (2012) argues that short-term reversal is the payment liquidity providers earn for absorbing order imbalances. When volatility is high, market makers and other liquidity providers are more capital-constrained and demand more compensation, so the price pressure from forced sellers is larger and its subsequent reversal is larger. Sector adjustment removes industry-wide moves, so the signal isolates stock-specific price pressure rather than sector news (the approach of Avellaneda and Lee, 2010, who trade residuals relative to sector factors).
+**Why I think it exists.** My reasoning is about who sits on the other side of a price move. When a stock falls sharply for reasons unrelated to its sector, part of the move is usually price pressure: someone has to sell (a fund meeting redemptions, a risk limit being hit) and someone else has to be willing to buy. Liquidity providers will only absorb that selling if they expect to be paid for it, so the price overshoots and then recovers. The same logic works in reverse for stocks pushed up by buying pressure. Subtracting the sector average removes industry-wide news, so what is left is more likely to be stock-specific pressure than information. I expect the payment for providing liquidity to be larger when markets are stressed, because liquidity providers are more constrained and the pressure is larger, and the VIX is a convenient, publicly observable gauge of that stress. This liquidity-provision explanation of reversal and its link to the VIX is developed in Nagel (2012); what I do here is turn it into a rules-based test with costs, a sizing rule fixed in advance, a volatility benchmark and an untouched test period.
 
 **Hypotheses.**
 - **H1 (mechanism):** the gross return of the reversal strategy is higher in weeks that follow elevated VIX.
 - **H2 (allocation):** a predefined, capped position-size rule based on lagged VIX improves out-of-sample, after-cost, risk-adjusted performance relative to the same strategy sized unconditionally.
 
-**Why this is worth testing.** The effect is published (Nagel, 2012), so this is a post-publication test: does it still exist six or more years after publication, in the most liquid stocks, after realistic costs? A known result that no longer works is an informative finding, and so is one that works only before costs.
+**Why this is worth testing.** Two questions matter more to me than whether the pattern exists. First, does it survive realistic trading costs? Reversal strategies trade a lot, so the answer is not obvious. Second, does knowing the VIX level actually help size the bet? The VIX is entangled with volatility itself, so a rule based on it has to be compared with a plain volatility-scaling rule before the VIX is given any credit; that is why I added the realised-volatility benchmark. A negative answer to either question is still informative.
 
 **What would prove me wrong.** I wrote the failure criterion down before running any analysis (`design_choices.md`): the hypothesis fails if (a) gross reversal returns are not higher after high VIX, or (b) the VIX rule does not beat the unconditional strategy after costs in the untouched test period. I also committed to reporting the result either way.
 
@@ -23,7 +23,7 @@ Buse Aydemir
 
 ## 2. Data Pipeline
 
-**Sources.** Daily split- and dividend-adjusted closing prices and the VIX index from Yahoo Finance (via `yfinance`), 2 January 2004 to 20 October 2026. The list of current S&P 500 constituents and their GICS sectors was scraped from Wikipedia. No API keys are needed.
+**Sources.** Daily split- and dividend-adjusted closing prices and the VIX index from Yahoo Finance (via `yfinance`), 2 January 2004 to 21 October 2026. The list of current S&P 500 constituents and their GICS sectors was scraped from Wikipedia. No API keys are needed.
 
 **Snapshot.** `data_pipeline.py` builds the snapshot in `data/`: `prices.csv.gz` (5,736 trading days by 499 tickers), `sectors.csv`, `vix.csv`, `dropped_tickers.csv` (each dropped ticker with a reason) and `pipeline_log.txt`. The notebook only calls `load_snapshot()`, so it runs offline and reproducibly. Running `python data_pipeline.py --refresh` rebuilds the snapshot.
 
@@ -107,7 +107,7 @@ Slopes come from an OLS regression of weekly gross return on the lagged VIX perc
 - **Transaction costs: 5 bps per side, 10 bps stress.**
   *Why:* a plausible all-in cost for large caps; the stress case shows sensitivity. *What breaks if wrong:* costs are not constant; spreads widen when VIX is high, so a flat assumption flatters the VIX rule. Borrow costs for shorts and market impact are not modelled.
 - **Train/test split: 2005 to 2017 for development, 2018 to October 2026 for the test.**
-  *Why:* development includes the 2008 crisis and a range of VIX levels; the test comes six years after Nagel (2012), making it a genuine post-publication test; it is 8.8 years long. *What breaks if wrong:* one split only, so the result depends on this particular test period; the test period was run once to avoid tuning.
+  *Why:* development includes the 2008 crisis and a range of VIX levels; the test is a long, entirely later period (8.8 years, including the 2020 crash and the 2022 rate shock), so it is a real test of whether a rule fixed in advance keeps working. *What breaks if wrong:* one split only, so the result depends on this particular test period; the test period was run once to avoid tuning.
 - **VIX rule: expanding-window percentile, multiplier clipped to 0.5 to 1.5.**
   *Why:* a percentile avoids hand-picking a VIX threshold and uses only past data; the clip limits leverage to a stated range; a single continuous rule has no free tuning parameter. *What breaks if wrong:* it assumes the VIX distribution is comparable over time; and because VIX conflates volatility and liquidity, the rule might just be scaling positions on volatility, which is why I added the realised-vol benchmark.
 - **Inference: Newey-West (HAC) standard errors, 4 lags.**
@@ -131,7 +131,7 @@ The universe is the 499 usable current S&P 500 members. Companies that were deli
 
 ### Overfitting/data-snooping
 
-I fixed the design (`design_choices.md`, commit 042ce5c) before running any backtest: one signal horizon (5 days), one decile, one weekly frequency, one cost level plus one stress level, one VIX rule with no free parameters beyond its stated 0.5 to 1.5 range. I tried exactly one configuration of each and did not tune anything. All parameters were chosen from the literature and from a priori reasoning, not by searching.
+I fixed the design (`design_choices.md`, commit 042ce5c) before running any backtest: one signal horizon (5 days), one decile, one weekly frequency, one cost level plus one stress level, one VIX rule with no free parameters beyond its stated 0.5 to 1.5 range. I tried exactly one configuration of each and did not tune anything. All parameters were chosen in advance from economic reasoning and standard conventions, not by searching.
 
 *Development-period analyses run:* the baseline backtest (gross, 5 bps, 10 bps), one regression and one tercile table, the VIX rule (5 and 10 bps), and the realised-vol benchmark (5 and 10 bps). *Test period:* run once.
 
@@ -173,6 +173,5 @@ The runner-up is the weekly backtest loop: for each of about 1,200 rebalances it
 ## References
 
 - Nagel, S. (2012). Evaporating Liquidity. *Review of Financial Studies*, 25(7), 2005 to 2039.
-- Avellaneda, M. and Lee, J.-H. (2010). Statistical arbitrage in the U.S. equities market. *Quantitative Finance*, 10(7), 761 to 782.
 - Data: Yahoo Finance (via `yfinance`) for daily prices and the VIX index; Wikipedia, "List of S&P 500 companies" (accessed October 2026) for constituents and GICS sectors.
 - Tools: Claude (Anthropic) assisted with brainstorming, code review and drafting. The design, results and interpretation are my own work, and the code and numbers were checked against each other.
