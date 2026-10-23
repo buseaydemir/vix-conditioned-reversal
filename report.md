@@ -181,4 +181,3 @@ The expanding-window VIX percentile is the worst step asymptotically, **O(T²)**
 - Data: Yahoo Finance (via `yfinance`) for daily prices and the VIX index; Wikipedia, "List of S&P 500 companies" (accessed October 2026) for constituents and GICS sectors.
 - Tools: Claude (Anthropic) assisted with brainstorming, code review and drafting. The design, results and interpretation are my own work, and the code and numbers were checked against each other.
 - Code, notebook and data snapshot: https://github.com/buseaydemir/vix-conditioned-reversal
-- Code, notebook and data snapshot: https://github.com/buseaydemir/vix-conditioned-reversal
