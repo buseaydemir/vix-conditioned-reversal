@@ -1,5 +1,5 @@
 Buse Aydemir
-22 October 2026
+23 October 2026
 
 # Does Short-Term Equity Reversal Pay More After High VIX? A Sector-Adjusted Backtest on S&P 500 Stocks
 
